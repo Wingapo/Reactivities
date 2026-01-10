@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import {List, ListItem, ListItemText, Typography} from "@mui/material";
 
 const App = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -11,12 +12,14 @@ const App = () => {
 
   return (
     <>
-      <h1>Reactivities</h1>
-      <ul>
+      <Typography variant="h1">Reactivities</Typography>
+      <List>
         {activities.map(activity => (
-          <li key={activity.id}>{activity.title}</li>
+          <ListItem key={activity.id}>
+            <ListItemText>{activity.title}</ListItemText>
+          </ListItem>
         ))}
-      </ul>
+      </List>
     </>
   );
 };
