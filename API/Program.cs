@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using Application;
 using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => options.ModelValidatorProviders.Clear());
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -17,6 +18,8 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials()));
+
+builder.Services.AddApplication();
 
 var app = builder.Build();
 
