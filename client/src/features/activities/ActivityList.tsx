@@ -4,14 +4,9 @@ import ActivityCard from "./ActivityCard.tsx";
 type Props = {
   activities: Activity[];
   handleSelectActivity: (id: string) => void;
-  handleDeleteActivity: (id: string) => void;
 }
 
-const ActivityList = ({
-  activities,
-  handleSelectActivity,
-  handleDeleteActivity,
-}: Props) => {
+const ActivityList = ({activities, handleSelectActivity}: Props) => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       {activities.map(activity => (
@@ -19,7 +14,6 @@ const ActivityList = ({
           key={activity.id}
           activity={activity}
           handleSelectActivity={handleSelectActivity}
-          handleDeleteActivity={handleDeleteActivity}
         />
       ))}
     </Box>

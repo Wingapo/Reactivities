@@ -1,4 +1,5 @@
 import {Button, Card, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
+import useActivities from "../../lib/hooks/useActivities.ts";
 
 type Props = {
   activity: Activity;
@@ -7,10 +8,17 @@ type Props = {
 }
 
 const ActivityDetail = ({
-  activity,
+  activity: selectedActivity,
   handleDeselectActivity,
   handleOpenForm,
 }: Props) => {
+  const {activities} = useActivities();
+  const activity = activities?.find(x => x.id === selectedActivity.id);
+
+  if (!activity) {
+    return null;
+  }
+
   return (
     <Card>
       <CardMedia component="img" src={`/images/categories/${activity.category}.jpg`} />

@@ -11,8 +11,6 @@ type Props = {
   isEditMode: boolean;
   handleOpenForm: (id?: string) => void;
   handleCloseForm: () => void;
-  handleFormSubmit: (activity: Activity) => void;
-  handleDeleteActivity: (id: string) => void;
 }
 
 const ActivityDashboard = ({
@@ -23,17 +21,11 @@ const ActivityDashboard = ({
   isEditMode,
   handleOpenForm,
   handleCloseForm,
-  handleFormSubmit,
-  handleDeleteActivity,
 }: Props) => {
   return (
     <Grid container spacing={3}>
       <Grid size={7}>
-        <ActivityList
-          activities={activities}
-          handleSelectActivity={handleSelectActivity}
-          handleDeleteActivity={handleDeleteActivity}
-        />
+        <ActivityList activities={activities} handleSelectActivity={handleSelectActivity} />
       </Grid>
       <Grid size={5}>
         {selectedActivity && !isEditMode && (
@@ -47,7 +39,6 @@ const ActivityDashboard = ({
           <ActivityForm
             handleCloseForm={handleCloseForm}
             activity={selectedActivity}
-            handleFormSubmit={handleFormSubmit}
           />
         )}
       </Grid>
