@@ -1,13 +1,13 @@
 import {Box, Button, Card, CardActions, CardContent, Chip, Typography} from '@mui/material';
-import useActivities from "../../lib/hooks/useActivities.ts";
+import {Link} from "react-router";
+import {useDeleteActivity} from "../../../lib/hooks/activities";
 
 type Props = {
   activity: Activity;
-  handleSelectActivity: (id: string) => void;
 }
 
-const ActivityCard = ({activity, handleSelectActivity}: Props) => {
-  const {deleteActivity} = useActivities();
+const ActivityCard = ({activity}: Props) => {
+  const deleteActivity = useDeleteActivity();
 
   return (
     <Card>
@@ -23,7 +23,8 @@ const ActivityCard = ({activity, handleSelectActivity}: Props) => {
           <Button
             size="medium"
             variant="contained"
-            onClick={() => handleSelectActivity(activity.id)}
+            component={Link}
+            to={`/activities/${activity.id}`}
           >View</Button>
           <Button
             size="medium"
