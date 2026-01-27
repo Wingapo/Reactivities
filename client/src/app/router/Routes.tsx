@@ -1,18 +1,16 @@
 import {createBrowserRouter} from "react-router";
 import App from "../layout/App.tsx";
-import HomePage from "../../features/home/HomePage.tsx";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard.tsx";
 import ActivityForm from "../../features/activities/form/ActivityForm.tsx";
-import ActivityDetail from "../../features/activities/details/ActivityDetail.tsx";
+import ActivityDetailsPage from "../../features/activities/details/ActivityDetailsPage.tsx";
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
     children: [
-      { path: '', element: <HomePage /> },
       { path: 'activities', element: <ActivityDashboard /> },
-      { path: 'activities/:id', element: <ActivityDetail /> },
+      { path: 'activities/:id', element: <ActivityDetailsPage /> },
       { path: 'activities/new', element: <ActivityForm key="empty" /> },
       { path: 'activities/:id/edit', element: <ActivityForm /> },
     ]
