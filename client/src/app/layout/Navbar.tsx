@@ -29,6 +29,7 @@ const Navbar = () => {
               <MenuItemLink to="/activities">Activities</MenuItemLink>
               <MenuItemLink to="/activities/new">Create Activity</MenuItemLink>
               <MenuItemLink to="/counter">Counter</MenuItemLink>
+              <MenuItemLink to="/errors">Errors</MenuItemLink>
             </Box>
             <MenuItem>*User menu*</MenuItem>
           </Toolbar>

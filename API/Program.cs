@@ -1,17 +1,23 @@
+using API.Handlers;
 using Microsoft.EntityFrameworkCore;
 using Application;
 using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
+var configuration = builder.Configuration;
 
-builder.Services.AddControllers(options => options.ModelValidatorProviders.Clear());
+services.AddControllers(options => options.ModelValidatorProviders.Clear());
 
-builder.Services.AddDbContext<ApplicationDbContext>(options => 
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+services.AddProblemDetails();
+services.AddExceptionHandler<GlobalExceptionHandler>();
 
-var allowedOrigins = builder.Configuration["CLIENT_APP_URLS"]
+services.AddDbContext<ApplicationDbContext>(options => 
+    options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
+var allowedOrigins = configuration["CLIENT_APP_URLS"]
     ?.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) ?? [];
-builder.Services.AddCors(options => 
+services.AddCors(options => 
     options.AddDefaultPolicy(policy => 
         policy
             .WithOrigins(allowedOrigins)
@@ -19,15 +25,20 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowCredentials()));
 
-builder.Services.AddApplication();
+services.AddApplication();
 
 var app = builder.Build();
 
-app.UseCors();
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
+app.UseExceptionHandler();
 
+app.UseHttpsRedirection();
+
+app.UseCors();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
 app.MapGet("/", () => "ok");
 
 using (var scope = app.Services.CreateScope())

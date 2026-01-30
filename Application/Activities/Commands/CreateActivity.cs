@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using Application.Core;
+using Domain;
 using FluentValidation;
 using MediatR;
 using Persistence;
@@ -7,7 +8,7 @@ namespace Application.Activities.Commands;
 
 public class CreateActivity
 {
-    public class Command : IRequest<Guid>
+    public class Command : IRequest<Result<Guid>>
     {
         public required string Title { get; init; }
         public required DateTimeOffset Date { get; init; }
@@ -51,9 +52,9 @@ public class CreateActivity
         }
     }
     
-    public class Handler(ApplicationDbContext context) : IRequestHandler<Command, Guid>
+    public class Handler(ApplicationDbContext context) : IRequestHandler<Command, Result<Guid>>
     {
-        public async Task<Guid> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<Guid>> Handle(Command request, CancellationToken cancellationToken)
         {
             var activity = new Activity
             {
@@ -71,7 +72,7 @@ public class CreateActivity
             context.Activities.Add(activity);
             await context.SaveChangesAsync(cancellationToken);
             
-            return activity.Id;
+            return Result<Guid>.Success(activity.Id);
         }
     }
 }

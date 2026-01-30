@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Application.Core;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -6,7 +7,7 @@ namespace Application.Activities.Commands;
 
 public class UpdateActivity
 {
-    public class Command : IRequest
+    public class Command : IRequest<Result>
     {
         public required Guid Id { get; init; }
         public required string Title { get; init; }
@@ -52,12 +53,15 @@ public class UpdateActivity
         }
     }
     
-    public sealed class Handler(ApplicationDbContext context) : IRequestHandler<Command>
+    public sealed class Handler(ApplicationDbContext context) : IRequestHandler<Command, Result>
     {
-        public async Task Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
         {
-            var activity = await context.Activities.FindAsync([request.Id], cancellationToken) 
-                           ?? throw new Exception("Activity not found");
+            var activity = await context.Activities.FindAsync([request.Id], cancellationToken); 
+            if (activity == null)
+            {
+                return ActivityErrors.NotFound(request.Id);
+            }
             
             activity.Title = request.Title;
             activity.Date = request.Date;
@@ -70,6 +74,8 @@ public class UpdateActivity
             activity.Longitude = request.Longitude;
 
             await context.SaveChangesAsync(cancellationToken);
+            
+            return Result.Success();
         }
     }
 }

@@ -5,9 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-[ApiController]
-[Route("/api/[controller]")]
-public class ActivitiesController(IMediator mediator) : ControllerBase
+
+public class ActivitiesController(IMediator mediator) : ApiControllerBase
 {
     public record CreateActivityDto(
         string Title,
@@ -36,8 +35,10 @@ public class ActivitiesController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetActivities(CancellationToken cancellationToken)
     {
         var query = new GetActivities.Query();
-        var activities = await mediator.Send(query, cancellationToken);
-        return Ok(activities);
+        var result = await mediator.Send(query, cancellationToken);
+        return result.IsSuccess
+            ? Ok(result.Value)
+            : Failure(result);
     }
 
     [HttpGet("{id:guid}")]
@@ -49,8 +50,10 @@ public class ActivitiesController(IMediator mediator) : ControllerBase
         {
             Id = id
         };
-        var activity = await mediator.Send(query, cancellationToken);
-        return Ok(activity);
+        var result = await mediator.Send(query, cancellationToken);
+        return result.IsSuccess 
+            ? Ok(result.Value) 
+            : Failure(result);
     }
 
     [HttpPost]
@@ -69,8 +72,10 @@ public class ActivitiesController(IMediator mediator) : ControllerBase
             Latitude = dto.Latitude,
             Longitude = dto.Longitude
         };
-        var id = await mediator.Send(command, cancellationToken);
-        return CreatedAtAction(nameof(CreateActivity), id);
+        var result = await mediator.Send(command, cancellationToken);
+        return result.IsSuccess 
+            ? CreatedAtAction(nameof(CreateActivity), result.Value) 
+            : Failure(result);
     }
 
     [HttpPut("{id:guid}")]
@@ -92,8 +97,10 @@ public class ActivitiesController(IMediator mediator) : ControllerBase
             Latitude = dto.Latitude,
             Longitude = dto.Longitude
         };
-        await mediator.Send(command, cancellationToken);
-        return NoContent();
+        var result = await mediator.Send(command, cancellationToken);
+        return result.IsSuccess 
+            ? NoContent() 
+            : Failure(result);
     }
 
     [HttpDelete("{id:guid}")]
@@ -105,7 +112,9 @@ public class ActivitiesController(IMediator mediator) : ControllerBase
         {
             Id = id
         };
-        await mediator.Send(command, cancellationToken);
-        return NoContent();
+        var result = await mediator.Send(command, cancellationToken);
+        return result.IsSuccess 
+            ? NoContent() 
+            : Failure(result);
     }
 }
