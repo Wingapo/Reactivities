@@ -6,3 +6,6 @@ riderModule.iml
 /_ReSharper.Caches/
 
 certs/
+
+
+.env.*.local

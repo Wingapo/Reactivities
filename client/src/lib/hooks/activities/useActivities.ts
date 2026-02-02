@@ -1,5 +1,6 @@
 import {useQuery} from "@tanstack/react-query";
 import agent from "../../api/agent.ts";
+import type {Activity} from "../../types";
 
 const useActivities = () => useQuery({
   queryKey: ['activities'],

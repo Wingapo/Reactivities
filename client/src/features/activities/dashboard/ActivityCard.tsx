@@ -12,6 +12,7 @@ import {
 import {Link} from "react-router";
 import {AccessTime, Place} from "@mui/icons-material";
 import {formatDate} from "../../../lib/utils";
+import type {Activity} from "../../../lib/types";
 
 type Props = {
   activity: Activity;

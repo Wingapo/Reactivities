@@ -39,7 +39,7 @@ public class UpdateActivity
 
             RuleFor(x => x.City)
                 .NotEmpty()
-                .MaximumLength(100);
+                .MaximumLength(500);
 
             RuleFor(x => x.Venue)
                 .NotEmpty()

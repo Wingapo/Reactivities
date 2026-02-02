@@ -42,7 +42,7 @@ public class CreateActivity
 
             RuleFor(x => x.Venue)
                 .NotEmpty()
-                .MaximumLength(100);
+                .MaximumLength(500);
             
             RuleFor(x => x.Latitude)
                 .InclusiveBetween(-90, 90);
